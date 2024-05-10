@@ -1,0 +1,5 @@
+const verifyCodes = [];
+
+export {
+    verifyCodes
+}
