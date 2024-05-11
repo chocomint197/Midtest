@@ -5,9 +5,9 @@ import token from '../utils/index.js';
 
 const userController = {
     getAllUser: async (req, res) => {
-        const listUser = await UserModel.find({});
+        const users = await UserModel.find({});
         res.status(200).send({
-            data: listUser,
+            data: users,
             message: 'Thành công!',
             success: true
         });
@@ -34,7 +34,6 @@ const userController = {
     login: async(req,res) => {
         try {
             const data = req.body;
-            console.log(data)
 
             const crrUser = await UserModel.findOne({
                 email: data.email,
@@ -43,9 +42,8 @@ const userController = {
             if(!crrUser) {
                 throw new Error("Sai tài khoản hoặc mật khẩu")
             }
-            console.log(crrUser)
-            console.log(data.password)
-            console.log(crrUser.salt)
+           
+
             if(bcrypt.hashSync(data.password, crrUser.salt) !== crrUser.password) {
                 throw new Error("Sai tài khoản hoặc mật khẩu")
             }
@@ -75,8 +73,10 @@ const userController = {
         try {
             const {id} = req.params;
             const crrUser = await UserModel.findById(id);
-            if(!crrUser) throw new Error('Không tồn tại thông tin người dùng')
-            res.status(200).send({
+            if(!crrUser) {
+                throw new Error('Không tồn tại thông tin người dùng')
+              }
+              res.status(200).send({
                 data: crrUser,
                 message:'Thành công'
         })
